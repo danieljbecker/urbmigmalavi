@@ -1,0 +1,122 @@
+## MalAvi, urbanization, migration
+## 02_trait merge
+## danbeck@ou.edu
+## last updated 3/23/2023
+
+## clean environment & plots
+rm(list=ls()) 
+graphics.off()
+gc()
+
+## libraries
+library(readxl)
+
+## read in edgelist
+setwd("~/Desktop/urbmigmalavi/flat files")
+edge=read.csv("MalAvi edgelist.csv")
+data=edge
+
+## collapse into host data
+lset=list()
+for(i in 1:length(unique(data$tip))){
+  
+  ## subset
+  set=data[data$tip%in%unique(data$tip)[i],]
+  
+  ## collapse lineage
+  nset=data.frame(tip=unique(data$tip)[i],
+                  lineages=paste(set$Lineage_Name,collapse=", "),
+                  alt_lineages=paste(set$Alt_Lineage_Name[!is.na(set$Alt_Lineage_Name)],collapse=", "))
+  lset[[i]]=nset
+}
+
+## collapse
+data=do.call(rbind.data.frame,lset)
+rm(lset,nset,set,i)
+
+## clean alt
+data$alt_lineages=NULL
+
+## load AVONET
+setwd("/Users/danielbecker/OneDrive - University of Oklahoma/Becker Lab/Datasets/AVONET")
+avonet=read_excel("AVONET Supplementary dataset 1.xlsx",4)
+
+## check name
+mis=setdiff(data$tip,avonet$Species3)
+
+## fix label
+avonet$tip=avonet$Species3
+
+## merge
+data=merge(data,avonet,by="tip",all.x=T)
+
+## Merge in Gonzalez-Lagos et al. 2022 (urban traits)
+setwd("/Users/danielbecker/OneDrive - University of Oklahoma/Becker Lab/Datasets/Gonzalez-Lagos et al 2021 Ecography")
+gdata=read.csv("DataS1.csv")
+
+## fix
+gdata$tip=gsub("_"," ",gdata$animal)
+
+## check name
+mis=setdiff(data$tip,gdata$tip)
+
+## fix synonyms
+rownames(gdata)=gdata$tip
+
+## Acrocephalus baeticatus/Acrocephalus scirpaceus
+new=gdata["Acrocephalus scirpaceus",]
+new$tip="Acrocephalus baeticatus"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Otus lempiji/Otus bakkamoena
+new=gdata["Otus bakkamoena",]
+new$tip="Otus lempiji"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Otus lettia/Otus bakkamoena
+new=gdata["Otus bakkamoena",]
+new$tip="Otus lettia"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Parus caeruleus/Parus teneriffae
+new=gdata["Parus caeruleus",]
+new$tip="Parus teneriffae"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Turdus nigriceps/Turdus subalaris
+new=gdata["Turdus nigriceps",]
+new$tip="Turdus subalaris"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## fix trait data
+gdata$tip=revalue(gdata$tip,
+                  c("Dendroica aestiva"="Dendroica petechia"))
+mis=setdiff(data$tip,gdata$tip)
+
+## clean trait data
+gdata=gdata[c("tip","urban","humanDisturbed")]
+
+## merge
+test=merge(data,gdata,by="gl_names",all.x=T)
+data=test
+rm(test,gdata,new,mis)
+
+
+
+## merge
+gdata$animal=NULL
+gdata=gdata[c("tip","urban","humanDisturbed","invasion.potential","UTI","tolerance")]
+data=merge(data,gdata,by="tip",all.x=T)
+rm(gdata,mis,avonet)
+
+
+
+
+## unique lineages
+ldata=data.frame(Lineage_Name=sort(unique(edge$Lineage_Name)))
+write.csv(ldata,"MalAvi edgelist.csv")
