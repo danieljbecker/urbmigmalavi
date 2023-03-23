@@ -93,27 +93,40 @@ new$tip="Turdus subalaris"
 rownames(new)=new$tip
 gdata=rbind.data.frame(gdata,new)
 
-## fix trait data
-gdata$tip=revalue(gdata$tip,
-                  c("Dendroica aestiva"="Dendroica petechia"))
+## Poospiza nigrorufa/Poospiza whitii
+new=gdata["Poospiza nigrorufa",]
+new$tip="Poospiza whitii"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Momotus aequatorialis/Momotus momota
+new=gdata["Momotus momota",]
+new$tip="Momotus aequatorialis"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## Nectarinia ludovicensis/Cinnyris ludovicensis
+new=gdata["Cinnyris ludovicensis",]
+new$tip="Nectarinia ludovicensis"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
+## check name
 mis=setdiff(data$tip,gdata$tip)
 
 ## clean trait data
 gdata=gdata[c("tip","urban","humanDisturbed")]
 
 ## merge
-test=merge(data,gdata,by="gl_names",all.x=T)
-data=test
-rm(test,gdata,new,mis)
-
-
-
-## merge
-gdata$animal=NULL
-gdata=gdata[c("tip","urban","humanDisturbed","invasion.potential","UTI","tolerance")]
 data=merge(data,gdata,by="tip",all.x=T)
-rm(gdata,mis,avonet)
+rm(gdata,avonet,mis,new)
 
+## as factor
+data$urban=factor(data$urban)
+data$humanDisturbed=factor(data$humanDisturbed)
+data$Migration=factor(data$Migration)
+
+## 
 
 
 
