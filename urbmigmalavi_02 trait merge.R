@@ -152,7 +152,9 @@ setwd("~/Desktop/urbmigmalavi/flat files")
 write.csv(data,"MalAvi hosts with traits_cleaned.csv")
 
 ## pull lineages
-ldata=data.frame(Lineage_Name=sort(unique(edge$Lineage_Name)))
+ldata=edge
+ldata=ldata[!duplicated(ldata$Lineage_Name),]
+ldata=ldata[c("Lineage_Name","Alt_Lineage_Name","parasiteGenus")]
 
 ## export
 setwd("~/Desktop/urbmigmalavi/flat files")
