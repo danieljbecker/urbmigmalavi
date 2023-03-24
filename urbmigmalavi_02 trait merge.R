@@ -10,11 +10,16 @@ gc()
 
 ## libraries
 library(readxl)
+library(reshape2)
 
 ## read in edgelist
 setwd("~/Desktop/urbmigmalavi/flat files")
 edge=read.csv("MalAvi edgelist.csv")
 data=edge
+
+## alternative lineage to NA
+data$Alt_Lineage_Name=as.character(data$Alt_Lineage_Name)
+data$Alt_Lineage_Name=ifelse(data$Alt_Lineage_Name=="",NA,data$Alt_Lineage_Name)
 
 ## collapse into host data
 lset=list()
@@ -34,9 +39,6 @@ for(i in 1:length(unique(data$tip))){
 data=do.call(rbind.data.frame,lset)
 rm(lset,nset,set,i)
 
-## clean alt
-data$alt_lineages=NULL
-
 ## load AVONET
 setwd("/Users/danielbecker/OneDrive - University of Oklahoma/Becker Lab/Datasets/AVONET")
 avonet=read_excel("AVONET Supplementary dataset 1.xlsx",4)
@@ -49,6 +51,18 @@ avonet$tip=avonet$Species3
 
 ## merge
 data=merge(data,avonet,by="tip",all.x=T)
+
+## load BirdTree taxonomy
+setwd("~/OneDrive - University of Oklahoma/Becker Lab/Datasets/BirdTree")
+pnames=read.csv("BLIOCPhyloMasterTax.csv")
+
+## check mismatch
+mis=setdiff(data$tip,pnames$Scientific)
+
+## merge
+pnames$tip=pnames$Scientific
+data=merge(data,pnames,by="tip",all.x=T)
+rm(mis,pnames)
 
 ## Merge in Gonzalez-Lagos et al. 2022 (urban traits)
 setwd("/Users/danielbecker/OneDrive - University of Oklahoma/Becker Lab/Datasets/Gonzalez-Lagos et al 2021 Ecography")
@@ -111,25 +125,35 @@ new$tip="Nectarinia ludovicensis"
 rownames(new)=new$tip
 gdata=rbind.data.frame(gdata,new)
 
+## Phylloscopus nitidus/Phylloscopus trochiloides
+new=gdata["Phylloscopus trochiloides",]
+new$tip="Phylloscopus nitidus"
+rownames(new)=new$tip
+gdata=rbind.data.frame(gdata,new)
+
 ## check name
 mis=setdiff(data$tip,gdata$tip)
+rm(mis,new)
 
 ## clean trait data
 gdata=gdata[c("tip","urban","humanDisturbed")]
 
 ## merge
 data=merge(data,gdata,by="tip",all.x=T)
-rm(gdata,avonet,mis,new)
+rm(gdata,avonet)
 
 ## as factor
 data$urban=factor(data$urban)
 data$humanDisturbed=factor(data$humanDisturbed)
 data$Migration=factor(data$Migration)
 
-## 
+## export cleaned data
+setwd("~/Desktop/urbmigmalavi/flat files")
+write.csv(data,"MalAvi hosts with traits_cleaned.csv")
 
-
-
-## unique lineages
+## pull lineages
 ldata=data.frame(Lineage_Name=sort(unique(edge$Lineage_Name)))
-write.csv(ldata,"MalAvi edgelist.csv")
+
+## export
+setwd("~/Desktop/urbmigmalavi/flat files")
+write.csv(ldata,"MalAvi lineages cleaned.csv")

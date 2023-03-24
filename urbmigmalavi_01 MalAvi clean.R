@@ -12,7 +12,7 @@ gc()
 library(malaviR)
 library(plyr)
 
-## load MalAvi host-lineage data
+## load MalAvi host-lineage data, 03242023
 data=extract_table("Hosts and Sites Table")
 
 ## trim columns
@@ -157,8 +157,7 @@ rm(mis)
 
 ## merge
 pnames$tip=pnames$Scientific
-pnames$Scientific=NULL
-data=merge(data,pnames,by="tip",all.x=T)
+data=merge(data,pnames[c("tip","Scientific")],by="tip",all.x=T)
 rm(pnames)
 
 ## make id
