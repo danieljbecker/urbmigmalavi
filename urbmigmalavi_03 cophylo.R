@@ -54,14 +54,14 @@ hptab=ifelse(hptab>0,1,0)
 # melt and visualize the matrix (computationally taxing)
 hptab_melt=melt(hptab)
 names(hptab_melt)=c("tiplab","Lineage_Name","value")
-ggplot(hptab_melt,aes(tiplab,Lineage_Name))+
-  geom_tile(aes(fill=value))+
-  scale_fill_gradient(low="wheat1",high="steelblue")+
-  theme_bw()+
-  coord_flip()+
-  theme(axis.text=element_blank(),
-        axis.title=element_blank())+
-  guides(fill=F)
+# ggplot(hptab_melt,aes(tiplab,Lineage_Name))+
+#   geom_tile(aes(fill=value))+
+#   scale_fill_gradient(low="wheat1",high="steelblue")+
+#   theme_bw()+
+#   coord_flip()+
+#   theme(axis.text=element_blank(),
+#         axis.title=element_blank())+
+#   guides(fill=F)
 
 ## phylogenetic distances for host and parasite
 htree_dist=cophenetic.phylo(htree)
@@ -71,23 +71,23 @@ ptree_dist=cophenetic.phylo(ptree)
 length(colnames(htree_dist))==length(unique(edge$tiplab))
 length(colnames(ptree_dist))==length(unique(edge$Lineage_Name))
 
-## Rtapas setup
-N=100
-nset=one2one_f(hptab,reps=N,interval=c(1,10),plot=T)
-pmax=max_cong(HS=hptab,
-              treeH=htree,
-              treeS=ptree,
-              n=nset,
-              N=N,
-              method="paco")
-
-## simple tangelgram
-tangle_gram(treeH=htree,
-            treeS=ptree,
-            HS=hptab,
-            fqtab=pmax,
-            colscale="diverging",
-            colgrad=viridis(10))
+# ## Rtapas setup
+# N=100
+# nset=one2one_f(hptab,reps=N,interval=c(1,10),plot=T)
+# pmax=max_cong(HS=hptab,
+#               treeH=htree,
+#               treeS=ptree,
+#               n=nset,
+#               N=N,
+#               method="paco")
+# 
+# ## simple tangelgram
+# tangle_gram(treeH=htree,
+#             treeS=ptree,
+#             HS=hptab,
+#             fqtab=pmax,
+#             colscale="diverging",
+#             colgrad=viridis(10))
 
 ## parafit
 # set.seed(1)
@@ -132,4 +132,5 @@ imat$value=NULL
 ## cophyloplot
 par(oma=c(0,0,0,0),mar=c(0,0,0,0))
 cophyloplot(htree,ptree,assoc=imat,show.tip.label=F,
-            use.edge.length=F,lwd=wei,space=120,gap=5,length.line=-5)
+            use.edge.length=F,lwd=0.01,space=2000,gap=5,length.line=-5)
+## lwd = wei
