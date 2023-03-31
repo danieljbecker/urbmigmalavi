@@ -21,8 +21,8 @@ setwd("~/Desktop/urbmigmalavi/flat files")
 edge=read.csv("MalAvi edgelist.csv")
 
 ## for trialing out code, subsample the egdelist
-# set.seed(1)
-# edge=edge[sample(nrow(edge),100),]
+set.seed(1)
+edge=edge[sample(nrow(edge),0.25*nrow(edge)),]
 
 ## load BirdTree
 setwd("/Users/danielbecker/Desktop/urbmigmalavi/BirdTree")
@@ -97,7 +97,6 @@ length(colnames(ptree_dist))==length(unique(edge$Lineage_Name))
 ## paco
 D=prepare_paco_data(H=htree_dist,P=ptree_dist,HP=hptab)
 D=add_pcoord(D,correction="cailliez")
-set.seed(1)
 pac=PACo(D,nperm=999,seed=1,method="r0",symmetric=F) ## assumes column group tracks row group
 
 ## get interaction-specific cophylogenetic contributions based on jacknife
