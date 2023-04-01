@@ -22,7 +22,7 @@ edge=read.csv("MalAvi edgelist.csv")
 
 ## for trialing out code, subsample the egdelist
 set.seed(1)
-edge=edge[sample(nrow(edge),0.25*nrow(edge)),]
+edge=edge[sample(nrow(edge),0.0025*nrow(edge)),]
 
 ## load BirdTree
 setwd("/Users/danielbecker/Desktop/urbmigmalavi/BirdTree")
@@ -101,6 +101,7 @@ pac=PACo(D,nperm=999,seed=1,method="r0",symmetric=F) ## assumes column group tra
 
 ## get interaction-specific cophylogenetic contributions based on jacknife
 pac_links=paco_links(pac)
+plot(pac_links$H_PCo[,1],pac_links$H_PCo[,2])
 
 ## pull out contributions
 res=residuals_paco(pac_links$proc)
