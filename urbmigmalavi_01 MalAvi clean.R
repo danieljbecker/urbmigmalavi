@@ -1,7 +1,7 @@
 ## MalAvi, urbanization, migration
 ## 01_MalAvi clean
 ## danbeck@ou.edu
-## last updated 3/23/2023
+## last updated 4/4/2023
 
 ## clean environment & plots
 rm(list=ls()) 
@@ -12,7 +12,7 @@ gc()
 library(malaviR)
 library(plyr)
 
-## load MalAvi host-lineage data, 03242023
+## load MalAvi host-lineage data, 04042023
 data=extract_table("Hosts and Sites Table")
 
 ## trim columns
@@ -20,6 +20,12 @@ data=data[c("Lineage_Name","Alt_Lineage_Name","parasiteGenus","species")]
 
 ## make unique
 data$id=paste(data$Lineage_Name,data$species)
+
+## must have at least two observations
+keep=names(which(table(data$id)>1))
+data=data[data$id%in%keep,]
+length(unique(data$species))
+length(unique(data$Lineage_Name))
 
 ## remove dups
 data=data[!duplicated(data$id),]
