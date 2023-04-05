@@ -20,10 +20,6 @@ library(Rtapas)
 setwd("~/Desktop/urbmigmalavi/flat files")
 edge=read.csv("MalAvi edgelist.csv")
 
-## for trialing out code, subsample the egdelist
-set.seed(1)
-edge=edge[sample(nrow(edge),0.0025*nrow(edge)),]
-
 ## load BirdTree
 setwd("/Users/danielbecker/Desktop/urbmigmalavi/BirdTree")
 htree=readRDS("BirdTree 2K tree consensus.rds")
@@ -90,9 +86,9 @@ length(colnames(ptree_dist))==length(unique(edge$Lineage_Name))
 #             colgrad=viridis(10))
 
 ## parafit
-# set.seed(1)
-# pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
-#              correction="cailliez",nperm=10,test.links=TRUE)
+set.seed(1)
+pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
+             correction="cailliez",nperm=10,test.links=TRUE)
 
 ## paco
 D=prepare_paco_data(H=htree_dist,P=ptree_dist,HP=hptab)
@@ -132,5 +128,5 @@ imat$value=NULL
 ## cophyloplot
 par(oma=c(0,0,0,0),mar=c(0,0,0,0))
 cophyloplot(htree,ptree,assoc=imat,show.tip.label=F,
-            use.edge.length=F,lwd=0.01,space=2000,gap=5,length.line=-5)
+            use.edge.length=F,lwd=0.05,space=500,gap=5,length.line=-5)
 ## lwd = wei
