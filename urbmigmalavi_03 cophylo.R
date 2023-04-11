@@ -86,9 +86,9 @@ length(colnames(ptree_dist))==length(unique(edge$Lineage_Name))
 #             colgrad=viridis(10))
 
 ## parafit
-set.seed(1)
-pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
-             correction="cailliez",nperm=10,test.links=TRUE)
+# set.seed(1)
+# pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
+#              correction="cailliez",nperm=10,test.links=TRUE)
 
 ## paco
 D=prepare_paco_data(H=htree_dist,P=ptree_dist,HP=hptab)
@@ -115,6 +115,12 @@ jdata$pairs=rownames(jdata)
 ## combine
 rdata=merge(rdata,jdata,by="pairs",all.x=T)
 rm(jdata)
+
+## export
+setwd("~/Desktop/urbmigmalavi/flat files")
+saveRDS(pac,"pac.rds")
+saveRDS(pac_links,"pac_links.rds")
+write.csv(rdata,"PACo results.csv")
 
 ## weight as rescaled res
 wei=plotrix::rescale(res,c(2,0.1)) ## large res = little weight
