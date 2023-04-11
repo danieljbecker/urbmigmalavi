@@ -86,9 +86,9 @@ length(colnames(ptree_dist))==length(unique(edge$Lineage_Name))
 #             colgrad=viridis(10))
 
 ## parafit
-# set.seed(1)
-# pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
-#              correction="cailliez",nperm=10,test.links=TRUE)
+set.seed(1)
+pfit=parafit(host.D=htree_dist,para.D=ptree_dist,HP=hptab,
+             correction="cailliez",nperm=10,test.links=TRUE)
 
 ## paco
 D=prepare_paco_data(H=htree_dist,P=ptree_dist,HP=hptab)
@@ -128,5 +128,5 @@ imat$value=NULL
 ## cophyloplot
 par(oma=c(0,0,0,0),mar=c(0,0,0,0))
 cophyloplot(htree,ptree,assoc=imat,show.tip.label=F,
-            use.edge.length=F,lwd=0.01,space=2000,gap=5,length.line=-5)
+            use.edge.length=F,lwd=0.05,space=500,gap=5,length.line=-5)
 ## lwd = wei
