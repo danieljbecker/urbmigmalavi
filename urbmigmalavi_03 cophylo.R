@@ -20,10 +20,6 @@ library(Rtapas)
 setwd("~/Desktop/urbmigmalavi/flat files")
 edge=read.csv("MalAvi edgelist.csv")
 
-## for trialing out code, subsample the egdelist
-set.seed(1)
-edge=edge[sample(nrow(edge),0.0025*nrow(edge)),]
-
 ## load BirdTree
 setwd("/Users/danielbecker/Desktop/urbmigmalavi/BirdTree")
 htree=readRDS("BirdTree 2K tree consensus.rds")
@@ -54,14 +50,14 @@ hptab=ifelse(hptab>0,1,0)
 # melt and visualize the matrix (computationally taxing)
 hptab_melt=melt(hptab)
 names(hptab_melt)=c("tiplab","Lineage_Name","value")
-# ggplot(hptab_melt,aes(tiplab,Lineage_Name))+
-#   geom_tile(aes(fill=value))+
-#   scale_fill_gradient(low="wheat1",high="steelblue")+
-#   theme_bw()+
-#   coord_flip()+
-#   theme(axis.text=element_blank(),
-#         axis.title=element_blank())+
-#   guides(fill=F)
+ggplot(hptab_melt,aes(tiplab,Lineage_Name))+
+  geom_tile(aes(fill=value))+
+  scale_fill_gradient(low="wheat1",high="steelblue")+
+  theme_bw()+
+  coord_flip()+
+  theme(axis.text=element_blank(),
+        axis.title=element_blank())+
+  guides(fill=F)
 
 ## phylogenetic distances for host and parasite
 htree_dist=cophenetic.phylo(htree)
