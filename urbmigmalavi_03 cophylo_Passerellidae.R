@@ -123,12 +123,20 @@ jdata$pairs=rownames(jdata)
 rdata=merge(rdata,jdata,by="pairs",all.x=T)
 rm(jdata)
 
+#average jackknife per species
+collapsed_values <- tapply(rdata$jackknife, rdata$tiplab, mean)
+
+#collapse species links into average 
+collapsed_rdata <- data.frame(tiplab = unique(rdata$tiplab),
+                           avg_jackknife = collapsed_values)
+
 ## export
 #setwd("~/Desktop/urbmigmalavi/flat files")
 setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/flat files")
 saveRDS(pac,"pac.rds")
 saveRDS(pac_links,"pac_links.rds")
 write.csv(rdata,"PACo results_Passerellidae.csv")
+write.csv(collapsed_rdata, "collapsed PACo results_Passerellidae.csv")
 
 ## weight as rescaled res
 wei=plotrix::rescale(res,c(2,0.1)) ## large res = little weight
@@ -144,6 +152,6 @@ par(oma=c(0,0,0,0),mar=c(0,0,0,0))
             #use.edge.length=F,lwd=0.05,space=500,gap=5,length.line=-5)
 
 cophyloplot(htree,ptree,assoc=imat,show.tip.label=T,
-            use.edge.length=F,lwd=wei,space=120,gap=5,length.line=20)
+            use.edge.length=F,lwd=wei,space=120,gap=5,length.line=0)
 
 ## lwd = wei

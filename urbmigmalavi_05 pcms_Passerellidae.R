@@ -105,23 +105,50 @@ plot(conditional_effects(bmod), points = TRUE)
 setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/flat files")
 rdata=read.csv("PACo results_Passerellidae.csv")
 rdata$X=NULL
+collapsed_rdata=read.csv("collapsed PACo results_Passerellidae.csv")
+collapsed_rdata$X=NULL
 
 ## merge with traits
 rdata=merge(rdata,data,by="tiplab",all.x=T)
+collapsed_rdata=merge(collapsed_rdata,data,by="tiplab",all.x=T)
+
+#cdata with paco data for pgls
+cdata=comparative.data(phy=htree,data=collapsed_rdata,names.col=label,vcv=T,na.omit=F,warn.dropped=T)
 
 ## vis jacknife
 ggplot(rdata[!is.na(rdata$humanDisturbed),],
        aes(humanDisturbed,jackknife))+geom_boxplot()
+
+ggplot(collapsed_rdata[!is.na(collapsed_rdata$humanDisturbed),],
+       aes(humanDisturbed,avg_jackknife,fill=humanDisturbed))+geom_boxplot()+ scale_fill_manual(values = c("0" = "bisque2", "1" = "orange2"))+xlab("Host presence in disturbed habitat")+
+  ylab("Average jackknifed residuals")
+
+ggplot(collapsed_rdata[!is.na(collapsed_rdata$humanDisturbed),],
+       aes(urban,avg_jackknife,fill=urban))+geom_boxplot()+scale_fill_manual(values = c("0" = "bisque2", "1" = "dimgray"))+xlab("Host presence in urban habitat")+
+  ylab("Average jackknifed residuals")
 
 hist(log(rdata$jackknife))
 
 ## lmer: residuals are individual links, not averaged by host sp.
 mod=lmer(log(jackknife)~humanDisturbed+(1|Lineage_Name),
           data=rdata)
+
+mod=glm(log(avg_jackknife)~humanDisturbed,
+         data=collapsed_rdata)
+summary(mod)
+
+mod=glm(log(avg_jackknife)~urban,
+        data=collapsed_rdata)
 summary(mod)
 #Anova(mod)
 #pgls with averaged residuals or need to run brms 
 #tapply to avg residuals per host species 
+
+#pgls version
+pgls_mod=pgls(cdata$data$avg_jackknife~cdata$data$humanDisturbed,data=cdata,lambda="ML")
+#pgls_mod=pgls(cdata$data$avg_jackknife~cdata$data$urban,data=cdata,lambda="ML")
+summary(pgls_mod)
+
 
 bmod=brm(richness~humanDisturbed+lcites+
            (1|obs)+(1|gr(label,cov=A)),
