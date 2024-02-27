@@ -35,7 +35,8 @@ edge=merge(edge,taxonomy,by="tip",all.x=T)
 songbird_edgelist <- edge %>% filter(Order3 == "Passeriformes")
 setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/flat files")
 write.csv(songbird_edgelist,"songbirds only Malavi edgelist.csv")
-
+rm(avonet)
+rm(songbird_edgelist)
 
 #back to merging host traits to big df 
 ## check name
@@ -187,7 +188,7 @@ passer_data <- data %>% filter(Order3 == "Passeriformes")
 ## export cleaned data
 #setwd("~/Desktop/urbmigmalavi/flat files")
 setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/flat files")
-write.csv(passer_data,"MalAvi hosts with traits_cleaned_Passeriformes.csv")
+write.csv(data,"MalAvi hosts with traits_cleaned_Passeriformes.csv")
 
 ## pull lineages
 ldata=edge

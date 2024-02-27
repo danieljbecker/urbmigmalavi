@@ -1,0 +1,28 @@
+Loading required package: MASS
+Loading required package: mvtnorm
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:MASS’:
+
+    select
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: phytools
+Loading required package: maps
+Loading required package: parallel
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+slurmstepd: error: acct_gather_profile/influxdb _send_data: curl_easy_perform failed to send data (discarded). Reason: Timeout was reached
+There were 50 or more warnings (use warnings() to see the first 50)
+slurmstepd: error: *** JOB 17549109 ON c549 CANCELLED AT 2024-02-11T07:36:42 DUE TO TIME LIMIT ***
