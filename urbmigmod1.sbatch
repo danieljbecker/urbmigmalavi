@@ -5,7 +5,7 @@
 #SBATCH --mem=1024
 #SBATCH --output=urbmigmod1_output_%J.txt
 #SBATCH --error=urbmigmod1_error_%J.txt
-#SBATCH --time=96:00:00
+#SBATCH --time=144:00:00
 #SBATCH --job-name=urbmigmod1
 #SBATCH --mail-user=tbverrett@ou.edu
 #SBATCH --mail-type=ALL

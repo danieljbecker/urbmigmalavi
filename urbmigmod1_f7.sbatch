@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+#SBATCH --partition=longjobs
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=20
+#SBATCH --output=urbmigmod1_f7_output_%J.txt
+#SBATCH --error=urbmigmod1_f7_error_%J.txt
+#SBATCH --time=144:00:00
+#SBATCH --job-name=urbmigmod1_f7
+#SBATCH --mail-user=tbverrett@ou.edu
+#SBATCH --mail-type=ALL
+#SBATCH --chdir=/home/verrett/R
+#
+#################################################
+module load R/4.2.1-foss-2022a
+Rscript OSCER_urbmigmalavi_05pcms_noLeuco_F7.R

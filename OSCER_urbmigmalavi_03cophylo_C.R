@@ -19,12 +19,13 @@ library(Rtapas)
 
 ## load edgelist
 #setwd("~/Desktop/urbmigmalavi/flat files")
-setwd("/home/verrett/R")
-edge=read.csv("MalAvi edgelist.csv")
+setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/flat files")
+#setwd("/home/verrett/R")
+edge=read.csv("MalAvi edgelist_noLeuco.csv")
 
 ## load BirdTree
 #setwd("/Users/danielbecker/Desktop/urbmigmalavi/BirdTree")
-#setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/BirdTree")
+setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/BirdTree")
 htree=readRDS("BirdTree 2K tree consensus.rds")
 
 ## make tip label
@@ -36,7 +37,7 @@ htree=keep.tip(htree,unique(edge$tiplab))
 
 ## load MalAvi phylogeny
 #setwd("/Users/danielbecker/Desktop/urbmigmalavi/MalAvi phylo")
-#setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/MalAvi phylo")
+setwd("/Users/taylorverrett/Documents/GitHub/urbmigmalavi/MalAvi phylo")
 ptree=read.nexus("birds-iqtree-contree-nexus.nex")
 
 ## check correct match
